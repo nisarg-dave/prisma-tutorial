@@ -19,21 +19,32 @@ datasource db {
 // field name followed by type
 // @symbol are attributes
 model User {
-  id          Int     @id @default(autoincrement())
-  name        String
-  email       String
-  isAmdin     Boolean
+  id             Int     @id @default(autoincrement())
+  name           String
+  email          String
+  isAmdin        Boolean
   // largeNumber BigInt
   //  allows you to store JSON data
-  preferences Json
+  preferences    Json
   // blob        Bytes, useful for files
   // blob Unsupported(""), never will use this but used by prisma when migrating from exisiting db
+  // array of posts, one to many posts
+  // Distinguishing between two one to many relationships with @relation attribute
+  writtenPosts   Post[]  @relation("WrittenPosts")
+  favouritePosts Post[]  @relation("FavouritePosts")
 }
 
 model Post {
-  id        Int      @id @default(autoincrement())
-  rating    Float
+  id             Int      @id @default(autoincrement())
+  // id String @id @default(uuid()) , can also be uuids
+  rating         Float
   // rating Decimal, decimal just has wider range of numbers comparted to float and more accurate
-  createdAt DateTime
-  updatedAt DateTime
+  createdAt      DateTime
+  updatedAt      DateTime
+  // Saying here, authorId here references id field in user
+  // Able to distinguish between two one to many relationships by giving name as first parameter
+  author         User     @relation("WrittenPosts", fields: [authorId], references: [id])
+  authorId       Int
+  favouritedBy   User     @relation("FavouritePosts", fields: [favouritedById], references: [id])
+  favouritedById Int
 }
