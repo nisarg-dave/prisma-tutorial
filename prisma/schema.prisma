@@ -12,9 +12,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Model represents table
+
 // @id tells prisma that it is an id
 // @default gives it a default value
+// field name followed by type
+// @symbol are attributes
 model User {
-  id   Int    @id @default(autoincrement())
-  name String
+  id          Int     @id @default(autoincrement())
+  name        String
+  email       String
+  isAmdin     Boolean
+  // largeNumber BigInt
+  //  allows you to store JSON data
+  preferences Json
+  // blob        Bytes, useful for files
+  // blob Unsupported(""), never will use this but used by prisma when migrating from exisiting db
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  rating    Float
+  // rating Decimal, decimal just has wider range of numbers comparted to float and more accurate
+  createdAt DateTime
+  updatedAt DateTime
 }
