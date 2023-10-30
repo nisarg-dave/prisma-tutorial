@@ -1,6 +1,6 @@
 ## Prisma Tutorial
 
-After installing Prisma, run this command
+After installing Prisma, run this command which creates prisma folder with schema.prisma file
 
 ```
 npx prisma init --datasource-provider postgresql
@@ -18,4 +18,16 @@ But don't have client yet, need to install it.
 
 ```
 npm i @prisma/client
+```
+
+To regenerate prisma client
+
+```
+npx prisma generate
+```
+
+To run script.ts file
+
+```
+npm run devStart
 ```

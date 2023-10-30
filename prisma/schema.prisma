@@ -6,6 +6,7 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// Can only have a single data source
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
