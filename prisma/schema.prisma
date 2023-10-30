@@ -1,0 +1,19 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Take Prisma code and generate into prisma-client-js (default generator to generate client code but there are other generators for like graphql)
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// @id tells prisma that it is an id
+// @default gives it a default value
+model User {
+  id   Int    @id @default(autoincrement())
+  name String
+}
