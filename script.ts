@@ -199,6 +199,30 @@ async function main() {
     },
   });
   console.log(updatedUser2);
+
+  // Connect existing relationships
+  const userPreference = await prisma.userPreference.create({
+    data: {
+      emailUpdates: true,
+    },
+  });
+
+  console.log(userPreference); // id for this for example is b0be14b2-5efc-4230-b149-134bb845d57c
+
+  // then can do this
+  const newUpdate = await prisma.user.update({
+    where: {
+      email: "kyle@test.com",
+    },
+    data: {
+      userPreference: {
+        connect: {
+          id: "b0be14b2-5efc-4230-b149-134bb845d57c",
+        },
+        // can also disconnect to remove user from that id, disconnect: true is what you need, connect is also available in create
+      },
+    },
+  });
 }
 
 main()
