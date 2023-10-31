@@ -36,44 +36,84 @@ async function main() {
   // });
 
   // can't use select with createMany but essentially creating many users
+  // const users = await prisma.user.createMany({
+  //   data: [
+  //     {
+  //       name: "Kyle",
+  //       email: "kyle@test.com",
+  //       age: 27,
+  //     },
+  //     {
+  //       name: "Sally",
+  //       email: "sally@test.com",
+  //       age: 32,
+  //     },
+  //   ],
+  // });
+  // console.log(users);
+
+  // // finding based on the unique fields only
+  // const foundUser = await prisma.user.findUnique({
+  //   // where key
+  //   where: {
+  //     // email: "kyle@test.com",
+  //     // block attribute in schema searched like this (special key created called age_name). can't search for age or name individually as no constraint set for them
+  //     age_name: {
+  //       age: 27,
+  //       name: "Kyle",
+  //     },
+  //   },
+  //   // can also do select and include with this
+  // });
+  // console.log(foundUser);
+
+  // // finding first user
+  // const findFirstUser = await prisma.user.findFirst({
+  //   where: {
+  //     age: 32,
+  //   },
+  // });
+  // console.log(findFirstUser);
+
   const users = await prisma.user.createMany({
     data: [
       {
-        name: "Kyle",
-        email: "kyle@test.com",
-        age: 27,
+        name: "Sally",
+        email: "sally@test1.com",
+        age: 12,
       },
       {
         name: "Sally",
-        email: "sally@test.com",
+        email: "sally@test2.com",
+        age: 13,
+      },
+      {
+        name: "Sally",
+        email: "sally@test3.com",
         age: 32,
       },
     ],
   });
-  console.log(users);
 
-  // finding based on the unique fields only
-  const foundUser = await prisma.user.findUnique({
-    // where key
+  const findManyUsers = await prisma.user.findMany({
     where: {
-      // email: "kyle@test.com",
-      // block attribute in schema searched like this (special key created called age_name). can't search for age or name individually as no constraint set for them
-      age_name: {
-        age: 27,
-        name: "Kyle",
-      },
+      name: "Sally",
     },
-    // can also do select and include with this
-  });
-  console.log(foundUser);
+    // finding based on distinct name, in this case only first sally returned
+    // distinct: ["name"],
 
-  // finding first user
-  const findFirstUser = await prisma.user.findFirst({
-    where: {
-      age: 32,
+    // pagination
+    // returns two users
+    take: 2,
+    // skip the first sally and get the next two
+    skip: 1,
+    // ordering by age
+    orderBy: {
+      age: "desc",
     },
   });
-  console.log(findFirstUser);
+
+  console.log(findManyUsers);
 }
 
 main()
