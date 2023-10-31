@@ -19,24 +19,25 @@ datasource db {
 // field name followed by type
 // @symbol are attributes
 model User {
-  id             Int             @id @default(autoincrement())
-  name           String
-  age            Int
+  id               Int             @id @default(autoincrement())
+  name             String
+  age              Int
   // unique emails
-  email          String          @unique
+  email            String          @unique
   // isAmdin        Boolean
   // instead of isadmin, we use role enum and using BASIC as default
-  role           Role            @default(BASIC)
+  role             Role            @default(BASIC)
   // largeNumber BigInt
   // preferences    Json,  //  allows you to store JSON data
   // blob        Bytes, useful for files
   // blob Unsupported(""), never will use this but used by prisma when migrating from exisiting db
   // array of posts, one to many posts
   // Distinguishing between two one to many relationships with @relation attribute
-  writtenPosts   Post[]          @relation("WrittenPosts")
-  favouritePosts Post[]          @relation("FavouritePosts")
-  // One to one, user can only have one preference and is optional
-  UserPreference UserPreference?
+  writtenPosts     Post[]          @relation("WrittenPosts")
+  favouritePosts   Post[]          @relation("FavouritePosts")
+  userPreference   UserPreference? @relation(fields: [userPreferenceId], references: [id])
+  // unique attribute for one to one relationship as it can't be many
+  userPreferenceId String?         @unique
 
   // block level attributes, above attributes are field level attributes
   // need to have unique name and age
@@ -48,9 +49,8 @@ model User {
 model UserPreference {
   id           String  @id @default(uuid())
   emailUpdates Boolean
-  user         User    @relation(fields: [userId], references: [id])
-  // unique attribute for one to one relationship as it can't be many
-  userId       Int     @unique
+  // One to one, user can only have one preference and is optional
+  user         User?
 }
 
 model Post {
@@ -72,7 +72,7 @@ model Post {
   // many to many -> posts can have many categories, notice there are no special relation atributes
   categories     Category[]
 
-  // composite id/key saying that the id is acutally represetned by the title and author id
+  // composite id/key saying that the id is actually represented by the title and author id
   // @@id([title, authorId])
 }
 

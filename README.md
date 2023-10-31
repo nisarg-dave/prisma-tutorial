@@ -32,7 +32,7 @@ To run script.ts file
 npm run devStart
 ```
 
-For future migrations
+For future migrations, and asks for a name
 
 ```
 npx prisma migrate dev
