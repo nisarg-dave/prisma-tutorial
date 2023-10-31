@@ -129,7 +129,28 @@ async function main() {
       // contains
       // email: { contains: "@test1.com" }
       // can also user startsWith or endsWith
-      email: { startsWith: "sally" },
+      // email: { startsWith: "sally" },
+
+      // Relationship filtering,
+      // Can also put queries in brackets like above
+      writtenPosts: {
+        // obviously none of the users will satisfy these conditions as there are no posts and so all returned
+        // every: {
+        //   title: "Test",
+        // },
+        // can also do none
+        // can also do some
+      },
+    },
+  });
+
+  const posts = await prisma.post.findMany({
+    where: {
+      author: {
+        is: {
+          age: 27,
+        },
+      },
     },
   });
 
