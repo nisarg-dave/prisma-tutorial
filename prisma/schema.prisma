@@ -19,23 +19,32 @@ datasource db {
 // field name followed by type
 // @symbol are attributes
 model User {
-  id             Int     @id @default(autoincrement())
+  id             Int             @id @default(autoincrement())
   name           String
   email          String
   isAmdin        Boolean
   // largeNumber BigInt
-  //  allows you to store JSON data
-  preferences    Json
+  // preferences    Json,  //  allows you to store JSON data
   // blob        Bytes, useful for files
   // blob Unsupported(""), never will use this but used by prisma when migrating from exisiting db
   // array of posts, one to many posts
   // Distinguishing between two one to many relationships with @relation attribute
-  writtenPosts   Post[]  @relation("WrittenPosts")
-  favouritePosts Post[]  @relation("FavouritePosts")
+  writtenPosts   Post[]          @relation("WrittenPosts")
+  favouritePosts Post[]          @relation("FavouritePosts")
+  // One to one, user can only have one preference and is optional
+  UserPreference UserPreference?
+}
+
+model UserPreference {
+  id           String  @id @default(uuid())
+  emailUpdates Boolean
+  user         User    @relation(fields: [userId], references: [id])
+  // unique attribute for one to one relationship as it can't be many
+  userId       Int     @unique
 }
 
 model Post {
-  id             Int      @id @default(autoincrement())
+  id             Int        @id @default(autoincrement())
   // id String @id @default(uuid()) , can also be uuids
   rating         Float
   // rating Decimal, decimal just has wider range of numbers comparted to float and more accurate
@@ -43,8 +52,16 @@ model Post {
   updatedAt      DateTime
   // Saying here, authorId here references id field in user
   // Able to distinguish between two one to many relationships by giving name as first parameter
-  author         User     @relation("WrittenPosts", fields: [authorId], references: [id])
+  author         User       @relation("WrittenPosts", fields: [authorId], references: [id])
   authorId       Int
-  favouritedBy   User     @relation("FavouritePosts", fields: [favouritedById], references: [id])
+  favouritedBy   User       @relation("FavouritePosts", fields: [favouritedById], references: [id])
   favouritedById Int
+  // many to many -> posts can have many categories, notice there are no special relation atributes
+  categories     Category[]
+}
+
+model Category {
+  id    String @id @default(uuid())
+  // many to many -> category can many posts, notice there are no special relation atributes
+  posts Post[]
 }
