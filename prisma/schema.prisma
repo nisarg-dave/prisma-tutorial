@@ -21,8 +21,12 @@ datasource db {
 model User {
   id             Int             @id @default(autoincrement())
   name           String
-  email          String
-  isAmdin        Boolean
+  age            Int
+  // unique emails
+  email          String          @unique
+  // isAmdin        Boolean
+  // instead of isadmin, we use role enum and using BASIC as default
+  role           Role            @default(BASIC)
   // largeNumber BigInt
   // preferences    Json,  //  allows you to store JSON data
   // blob        Bytes, useful for files
@@ -33,6 +37,12 @@ model User {
   favouritePosts Post[]          @relation("FavouritePosts")
   // One to one, user can only have one preference and is optional
   UserPreference UserPreference?
+
+  // block level attributes, above attributes are field level attributes
+  // need to have unique name and age
+  @@unique([age, name])
+  // indexing on email which allows for searching and sorting
+  @@index([email])
 }
 
 model UserPreference {
@@ -46,10 +56,13 @@ model UserPreference {
 model Post {
   id             Int        @id @default(autoincrement())
   // id String @id @default(uuid()) , can also be uuids
-  rating         Float
+  title          String
+  averageRating  Float
   // rating Decimal, decimal just has wider range of numbers comparted to float and more accurate
-  createdAt      DateTime
-  updatedAt      DateTime
+  // default now attribute, so don't need to enter it
+  createdAt      DateTime   @default(now())
+  // updatedat attribute, automatically stores when it was updated
+  updatedAt      DateTime   @updatedAt
   // Saying here, authorId here references id field in user
   // Able to distinguish between two one to many relationships by giving name as first parameter
   author         User       @relation("WrittenPosts", fields: [authorId], references: [id])
@@ -58,10 +71,20 @@ model Post {
   favouritedById Int
   // many to many -> posts can have many categories, notice there are no special relation atributes
   categories     Category[]
+
+  // composite id/key saying that the id is acutally represetned by the title and author id
+  // @@id([title, authorId])
 }
 
 model Category {
   id    String @id @default(uuid())
-  // many to many -> category can many posts, notice there are no special relation atributes
+  name  String @unique
+  // many to many -> category can many posts, notice there are no special relation atributes and prisma manages everything else for you
   posts Post[]
+}
+
+enum Role {
+  BASIC
+  EDITOR
+  ADMIN
 }
