@@ -223,6 +223,14 @@ async function main() {
       },
     },
   });
+
+  // Delete
+  const deleteUser = await prisma.user.delete({
+    where: {
+      // unique field
+      email: "kyle@test.com",
+    },
+  });
 }
 
 main()
