@@ -95,21 +95,41 @@ async function main() {
     ],
   });
 
+  // const findManyUsers = await prisma.user.findMany({
+  //   where: {
+  //     name: "Sally",
+  //   },
+  //   // finding based on distinct name, in this case only first sally returned
+  //   // distinct: ["name"],
+
+  //   // pagination
+  //   // returns two users
+  //   take: 2,
+  //   // skip the first sally and get the next two
+  //   skip: 1,
+  //   // ordering by age
+  //   orderBy: {
+  //     age: "desc",
+  //   },
+  // });
+
+  // Advance filtering
   const findManyUsers = await prisma.user.findMany({
     where: {
-      name: "Sally",
-    },
-    // finding based on distinct name, in this case only first sally returned
-    // distinct: ["name"],
-
-    // pagination
-    // returns two users
-    take: 2,
-    // skip the first sally and get the next two
-    skip: 1,
-    // ordering by age
-    orderBy: {
-      age: "desc",
+      // Can create queries inside the object
+      // name: { not: "Sally" },
+      // users in array
+      // name: { in: ["Sally", "Kyle"] },
+      // users not in array
+      // name: { notIn: ["Sally", "Kyle"] },
+      // age less than 20
+      // age: { lt: 20 },
+      // age greater than or equal 20
+      // age: { gte: 20 },
+      // contains
+      // email: { contains: "@test1.com" }
+      // can also user startsWith or endsWith
+      email: { startsWith: "sally" },
     },
   });
 
