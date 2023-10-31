@@ -78,6 +78,11 @@ async function main() {
   const users = await prisma.user.createMany({
     data: [
       {
+        name: "Kyle",
+        email: "kyle@test.com",
+        age: 27,
+      },
+      {
         name: "Sally",
         email: "sally@test1.com",
         age: 12,
@@ -154,7 +159,46 @@ async function main() {
     },
   });
 
-  console.log(findManyUsers);
+  // console.log(findManyUsers);
+
+  //  Update
+  const updatedUser = await prisma.user.update({
+    where: {
+      email: "sally@test1.com",
+    },
+    data: {
+      email: "sally@test11.com",
+    },
+    // can also do select and include
+  });
+
+  console.log(updatedUser);
+
+  const updatedManyUser = await prisma.user.updateMany({
+    where: {
+      name: "Sally",
+    },
+    data: {
+      name: "New Sally",
+    },
+    // can't do select and include -> like createMany
+  });
+
+  console.log(updatedManyUser);
+
+  const updatedUser2 = await prisma.user.update({
+    where: {
+      // has to be a unique field btw
+      email: "kyle@test.com",
+    },
+    data: {
+      age: {
+        increment: 1,
+        // can also decrement, multiply, divide
+      },
+    },
+  });
+  console.log(updatedUser2);
 }
 
 main()
