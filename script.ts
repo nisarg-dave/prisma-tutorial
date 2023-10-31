@@ -51,6 +51,29 @@ async function main() {
     ],
   });
   console.log(users);
+
+  // finding based on the unique fields only
+  const foundUser = await prisma.user.findUnique({
+    // where key
+    where: {
+      // email: "kyle@test.com",
+      // block attribute in schema searched like this (special key created called age_name). can't search for age or name individually as no constraint set for them
+      age_name: {
+        age: 27,
+        name: "Kyle",
+      },
+    },
+    // can also do select and include with this
+  });
+  console.log(foundUser);
+
+  // finding first user
+  const findFirstUser = await prisma.user.findFirst({
+    where: {
+      age: 32,
+    },
+  });
+  console.log(findFirstUser);
 }
 
 main()
