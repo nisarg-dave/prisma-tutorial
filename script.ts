@@ -35,7 +35,7 @@ async function main() {
   //   },
   // });
 
-  // can't use select with createMany but essentially creating many users
+  // can't use select and include with createMany but essentially creating many users
   // const users = await prisma.user.createMany({
   //   data: [
   //     {
