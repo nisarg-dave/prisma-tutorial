@@ -31,3 +31,9 @@ To run script.ts file
 ```
 npm run devStart
 ```
+
+For future migrations
+
+```
+npx prisma migrate dev
+```

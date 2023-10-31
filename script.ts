@@ -5,10 +5,11 @@ const prisma = new PrismaClient();
 async function main() {
   // prisma client then allows you to access models and run functions on them
   // create takes an object with key called data
-  const user = await prisma.user.create({ data: { name: "Sally" } });
-  console.log(user);
-  const users = await prisma.user.findMany();
-  console.log("All users", users);
+  // const user = await prisma.user.create({ data: { name: "Sally" } });
+  // console.log(user);
+  // const users = await prisma.user.findMany();
+  // console.log("All users", users);
+  await prisma.user.deleteMany();
 }
 
 main()
